@@ -1,5 +1,16 @@
+import { redirect } from '@/node_modules/next/navigation';
+import { getServerSession } from 'next-auth'
+import Dashboard from '../components/Dashboard'
+
+
 export default async function Home() {
+  const session = await getServerSession()
+
+  if (!session) {
+    redirect('/login')
+  }
+  
   return (
-   <h1>Dashboard will be soon</h1>
+    <Dashboard />
   );
 }
