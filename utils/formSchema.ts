@@ -9,7 +9,7 @@ export const validationSchema = z.object({
   email: z.string().email("Invalid email format"),
   password: z
     .string()
-    .min(1, "Password must be at least 6 characters long")
+    .min(1, "Password must be at least 1 characters long")
     .max(50, "Password cannot exceed 50 characters"),
 });
 
