@@ -8,8 +8,6 @@ export default async function LoginPage() {
  if (session) {
   redirect('/')
  }
-
- console.log('Session after login:', session)
  
  return (
   <Form />

@@ -22,6 +22,7 @@ export default function Form() {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
       password: formData.get("password") as string,
+      created_at: new Date().toISOString(), // Добавляем текущее время
       last_login: new Date().toISOString(), // Добавляем текущее время
     }
 
@@ -38,6 +39,7 @@ export default function Form() {
           email: data.email,
           password: data.password,
           last_login: data.last_login,
+          created_at: data.created_at,
           redirect: false,
         })
 
