@@ -23,7 +23,7 @@ export default function Dashboard() {
   const fetchUsers = async () => {
    setLoading(true)
    try {
-     const res = await fetch('/api/users')
+     const res = await fetch('/api/users', { cache: "reload" })
      if (!res.ok) {
        throw new Error(`Failed to fetch: ${res.statusText}`)
      }
@@ -90,8 +90,13 @@ export default function Dashboard() {
               {users.map((user) => (
                 <tr key={user.id} className="border-t border-gray-700">
                   <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.last_login}</td>
+                  <td>{user.email.toLowerCase()}</td>
+                  <td>
+                    {new Intl.DateTimeFormat('en-US', {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    }).format(new Date(user.last_login))}
+                  </td>
                   <td>{user.status}</td>
                   <td>
                     <button
