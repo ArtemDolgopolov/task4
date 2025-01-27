@@ -13,8 +13,8 @@ export default function Form() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setLoading(true) // Устанавливаем загрузку
-    setErrors({}) // Сбрасываем ошибки
+    setLoading(true)
+    setErrors({})
 
     const formData = new FormData(e.currentTarget)
 
@@ -22,8 +22,8 @@ export default function Form() {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
       password: formData.get("password") as string,
-      created_at: new Date().toISOString(), // Добавляем текущее время
-      last_login: new Date().toISOString(), // Добавляем текущее время
+      created_at: new Date().toISOString(),
+      last_login: new Date().toISOString(),
     }
 
     try {
@@ -47,7 +47,7 @@ export default function Form() {
           setErrors({ general: signInResponse.error })
         } else {
           router.push("/")
-          router.refresh() // Обновляем навигацию
+          router.refresh()
         }
       } else {
         const { errors: serverErrors } = await response.json()
@@ -56,7 +56,7 @@ export default function Form() {
     } catch (error) {
       setErrors({ general: "An unexpected error occurred" })
     } finally {
-      setLoading(false) // Всегда отключаем загрузку
+      setLoading(false)
     }
   }
 

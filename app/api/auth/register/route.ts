@@ -23,7 +23,6 @@ export async function POST(request: Request) {
 
    const newUser = rows[0];
 
-   // После регистрации возвращаем новый список пользователей
    const updatedUsers = await sql`
      SELECT email, name, status, created_at, last_login FROM users ORDER BY last_login DESC
    `;

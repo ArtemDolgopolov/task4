@@ -4,7 +4,9 @@ import { compare } from "bcrypt";
 
 export async function POST(request: Request) {
  try {
-   const { email, password } = await request.json();
+   const { id, email, password } = await request.json();
+
+   console.log("ID", id, email)
 
    if (!email || !password) {
      return NextResponse.json(
@@ -26,6 +28,13 @@ export async function POST(request: Request) {
 
    const user = rows[0];
 
+   if (user.status === 'blocked') {
+    return NextResponse.json(
+     { errors: { email: "User is blocked" } },
+     { status: 400 }
+   );
+   }
+
    const isValidPassword = await compare(password, user.password);
    if (!isValidPassword) {
      return NextResponse.json(
@@ -34,12 +43,10 @@ export async function POST(request: Request) {
      );
    }
 
-   // Обновление времени последнего входа
    await sql`
      UPDATE users SET last_login = NOW() WHERE id = ${user.id}
    `;
 
-   // Извлечь обновленный список пользователей
    const updatedUsers = await sql`
      SELECT email, name, status, created_at, last_login FROM users ORDER BY last_login DESC
    `;
@@ -51,8 +58,13 @@ export async function POST(request: Request) {
     response.headers.set('Expires', '0');
 
     return response;
- } catch (e) {
-   console.error("Server error: ", e);
+ } catch (e: any) {
+     if (e.code === "401" && e.detail.includes("email")) {
+       return NextResponse.json(
+       { errors: { email: "User not found" } },
+     );
+ }
+
    return NextResponse.json(
      { errors: { general: "Server error occurred" } },
      { status: 500 }

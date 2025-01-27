@@ -15,7 +15,7 @@ export default function Form() {
     e.preventDefault()
 
     setLoading(true)
-    setErrors({}) // Clean errors before a new attempt
+    setErrors({})
 
     const formData = new FormData(e.currentTarget)
 
@@ -24,7 +24,6 @@ export default function Form() {
       password: formData.get("password") as string,
     };
 
-    // Send data to the server for checking
     const response = await fetch("/api/auth/login", {
       method: "POST",
       headers: {
@@ -35,7 +34,6 @@ export default function Form() {
     });
 
     if (response.ok) {
-      // Successful server validation
       const signInResponse = await signIn("credentials", {
         email: data.email,
         password: data.password,
@@ -44,12 +42,11 @@ export default function Form() {
 
       if (!signInResponse?.error) {
         router.push("/")
-        router.refresh() // for proper dispaying of navigation components
+        router.refresh()
       } else {
         setErrors({ general: signInResponse.error })
       }
     } else {
-      // Receive server errors
       const { errors: serverErrors } = await response.json()
       setErrors(serverErrors || {})
     }

@@ -4,10 +4,9 @@ import { sql } from "@vercel/postgres";
 export async function GET() {
   try {
     const { rows } = await sql`
-      SELECT email, name, status, created_at, last_login FROM users ORDER BY last_login DESC
+      SELECT id, email, name, status, created_at, last_login FROM users ORDER BY last_login DESC
     `;
 
-    // Возвращаем данные пользователей без необходимости дополнительной обработки
     const response = NextResponse.json(rows, { status: 200 });
 
     response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');

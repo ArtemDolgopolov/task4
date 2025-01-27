@@ -19,8 +19,11 @@ const handler = NextAuth({
       password: {}
      },
      async authorize(credentials) {
-      if (!credentials?.email || !credentials.password) {
-       throw new Error("Email and password are required")
+      if (!credentials?.email) {
+       throw new Error("Email is required")
+      }
+      else if (!credentials.password) {
+       throw new Error("Password is required")
       }
 
       const response = await sql`
@@ -33,8 +36,6 @@ const handler = NextAuth({
       }
 
       const passwordCorrect = await compare(credentials?.password, user.password)
-
-      console.log({ passwordCorrect })
 
       if (passwordCorrect) {
        return {
